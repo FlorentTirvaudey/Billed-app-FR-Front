@@ -18,47 +18,39 @@ export default class NewBill {
   }
   handleChangeFile = e => {
     e.preventDefault()
-    const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
+    const input = this.document.querySelector(`input[data-testid="file"]`);
+    const file = input.files[0];
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
-    this.extensionFile = fileName.split('.')[1];
-    const extensionFile = this.extensionFile;
-    const formData = new FormData()
-    const email = JSON.parse(localStorage.getItem("user")).email
-    formData.append('file', file)
-    formData.append('email', email)
-
-    if (!(extensionFile === 'png' || extensionFile === 'jpeg' || extensionFile === 'jpg')) {
-      alert('format du fichier non supporté');
-    } else {
-      this.store
-        .bills()
-        .create({
-          data: formData,
-          headers: {
-            noContentType: true
-          }
-        })
-        .then(({fileUrl, key}) => {
-          console.log("test", fileUrl)
-          this.billId = key
-          this.fileUrl = fileUrl
-          this.fileName = fileName
-        }).catch(error => console.error(error))
-    }
-
+    const regexExtensionFile = /^.+(\.jpeg|\.png|\.jpg)$/;
+    if (regexExtensionFile.test(fileName)) {
+      const formData = new FormData()
+      const email = JSON.parse(localStorage.getItem("user")).email
+      formData.append('file', file)
+      formData.append('email', email)
+        this.store
+          .bills()
+          .create({
+            data: formData,
+            headers: {
+              noContentType: true
+            }
+          })
+          .then(({fileUrl, key}) => {
+            console.log("test", fileUrl)
+            this.billId = key
+            this.fileUrl = fileUrl
+            this.fileName = fileName
+          }).catch(error => console.error(error))
+      } else {
+        input.value = "";
+        alert("format du fichier non supporté");
+        return false;
+      }
   }
   handleSubmit = e => {
     e.preventDefault()
     console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
-
-    const extensionFile = this.extensionFile;
-
-    if (!(extensionFile === 'png' || extensionFile === 'jpeg' || extensionFile === 'jpg')) {
-      e.preventDefault();
-      alert('format du fichier non supporté');
-      return;
-    }
 
     const email = JSON.parse(localStorage.getItem("user")).email
     const bill = {
