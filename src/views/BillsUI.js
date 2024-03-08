@@ -21,7 +21,7 @@ const row = (bill) => {
 
 const rows = (data) => {
   if (data && data.length) {
-    data.sort((a, b) => new Date(a.date) - new Date(b.date));
+    data.sort((a, b) => new Date(b.date) - new Date(a.date));
     return data.map(bill => row(bill)).join("");
   } else {
     return "";
