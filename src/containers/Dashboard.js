@@ -103,7 +103,7 @@ export default class {
         <div id="big-billed-icon" data-testid="big-billed-icon"> ${BigBilledIcon} </div>
       `)
       $('.vertical-navbar').css({ height: '120vh' })
-      this.counter ++
+      this.counter ++ // résout le bug mais empêche de cliquer 2 fois sur la card pour afficher la big bill icon en fond
     }
     $('#icon-eye-d').click(this.handleClickIconEye)
     $('#btn-accept-bill').click((e) => this.handleAcceptSubmit(e, bill))
@@ -146,7 +146,8 @@ export default class {
     }
 
     bills.forEach(bill => {
-      $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
+      $(`#open-bill${bill.id}`).off("click");
+      $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills));
     })
 
     return bills
