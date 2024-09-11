@@ -37,20 +37,17 @@ export default class NewBill {
             }
           })
           .then(({fileUrl, key}) => {
-            console.log("test", fileUrl)
             this.billId = key
             this.fileUrl = fileUrl
             this.fileName = fileName
           }).catch(error => console.error(error))
       } else {
         input.value = "";
-        alert("format du fichier non supporté");
         return false;
       }
   }
   handleSubmit = e => {
     e.preventDefault()
-    console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
 
     const email = JSON.parse(localStorage.getItem("user")).email
     const bill = {
